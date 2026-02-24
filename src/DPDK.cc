@@ -110,7 +110,7 @@ inline int DPDK::port_init(uint16_t port)
 		.rxmode =
 			{
 				.mq_mode = ETH_MQ_RX_RSS,
-#if RTE_VERSION >= RTE_VERSION_NUM(21,8,0,0)
+#if RTE_VERSION >= RTE_VERSION_NUM(21,11,0,0)
 				.mtu = JUMBO_FRAME_MAX_SIZE,
 #else
 				.max_rx_pkt_len = JUMBO_FRAME_MAX_SIZE,
@@ -123,7 +123,7 @@ inline int DPDK::port_init(uint16_t port)
 				.rss_conf =
 					{
 						.rss_key = rss_key,
-						.rss_key_len = 52,
+						.rss_key_len = 40,
 						.rss_hf = ETH_RSS_NONFRAG_IPV4_TCP | ETH_RSS_NONFRAG_IPV6_TCP |
 	                              ETH_RSS_NONFRAG_IPV4_UDP | ETH_RSS_NONFRAG_IPV6_UDP |
 	                              ETH_RSS_NONFRAG_IPV4_OTHER | ETH_RSS_NONFRAG_IPV6_OTHER |
@@ -176,7 +176,7 @@ inline int DPDK::port_init(uint16_t port)
 	if ( dev_info.max_rx_pktlen > 1024 )
 		{
 
-#if RTE_VERSION >= RTE_VERSION_NUM(21,8,0,0)
+#if RTE_VERSION >= RTE_VERSION_NUM(21,11,0,0)
 		port_conf.rxmode.mtu = RTE_MIN(dev_info.max_mtu, JUMBO_FRAME_MAX_SIZE);
 #else
 		port_conf.rxmode.max_rx_pkt_len = RTE_MIN(dev_info.max_rx_pktlen, JUMBO_FRAME_MAX_SIZE);
@@ -202,7 +202,7 @@ inline int DPDK::port_init(uint16_t port)
 		}
 
 	// Set MTU to the maximum
-#if RTE_VERSION >= RTE_VERSION_NUM(21,8,0,0)
+#if RTE_VERSION >= RTE_VERSION_NUM(21,11,0,0)
 	retval = rte_eth_dev_set_mtu(port, port_conf.rxmode.mtu);
 	if ( retval != 0 )
 		reporter->Warning("Error during running eth_dev_set_mtu (port %u, mtu %lu) info: %s\n",
